@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        jcenter()
+		mavenCentral()
+    }
+}
+
+plugins {
+	id 'nebula.lint' version '8.3.1'
+}
+
+group 'org.vbrandl'
+version = '0.1.0'
+
+apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+	mavenCentral()
+}
+
+compileJava {
+    options.warnings = true
+    options.deprecation = true
+    options.compilerArgs += ["-Xdoclint", "-Xlint"]
+}
+
+gradleLint {
+	// warn on these lints
+	rules = ['dependency-parentheses']
+	// fail the build on these lints
+	criticalRules = ['unused-dependency']
+}
+
+dependencies {
+    testCompile 'junit:junit:[4.12,5.0)'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Version': version,
+                   'Specification-Version': version
+    }
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+tasks.withType(Pmd) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+checkstyle {
+    configFile rootProject.file('config/checkstyle/checkstyle.xml')
+    toolVersion = '7.8.2'
+}
+
+pmd {
+    toolVersion = '5.7.0'
+    ruleSetFiles = files('config/pmd/pmd-all-java.xml')
+}
