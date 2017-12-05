@@ -1,4 +1,9 @@
-# Railroad-Oriented-Programming
+# Java Monadic Errorhandling
+
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/vbrandl/countmap/blob/master/LICENSE-MIT)
+[![License](https://img.shields.io/badge/license-Apache-green.svg)](https://github.com/vbrandl/countmap/blob/master/LICENSE-APACHE)
+[![Build Status](https://travis-ci.org/vbrandl/java-errorhandling.svg?branch=master)](https://travis-ci.org/vbrandl/java-errorhandling)
+[![Coverage Status](https://coveralls.io/repos/github/vbrandl/java-errorhandling/badge.svg?branch=master)](https://coveralls.io/github/vbrandl/java-errorhandling?branch=master)
 
 This library aims to provide some useful data types to be used in Java.
 
