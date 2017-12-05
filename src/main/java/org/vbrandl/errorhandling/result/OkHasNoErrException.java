@@ -39,7 +39,7 @@
  * limitations under the License.
  */
 
-package org.vbrandl.rop.result;
+package org.vbrandl.errorhandling.result;
 
 /**
  * Exception to be thrown if {@link Result#getErr} is called on an {@link Ok}.

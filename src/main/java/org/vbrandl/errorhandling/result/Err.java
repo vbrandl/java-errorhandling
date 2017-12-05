@@ -39,7 +39,7 @@
  * limitations under the License.
  */
 
-package org.vbrandl.rop.result;
+package org.vbrandl.errorhandling.result;
 
 import java.util.Optional;
 import java.util.function.Consumer;

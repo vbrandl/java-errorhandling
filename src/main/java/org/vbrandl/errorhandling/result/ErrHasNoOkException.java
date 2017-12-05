@@ -39,14 +39,14 @@
  * limitations under the License.
  */
 
-package org.vbrandl.rop.result;
+package org.vbrandl.errorhandling.result;
 
 /**
- * Exception to be thrown if {@link Result#getOk} is called on an empty {@link Ok}.
+ * Exception to be thrown if {@link Result#getOk} is called on an {@link Err}.
  */
-public final class EmptyResultException extends RuntimeException {
+public final class ErrHasNoOkException extends RuntimeException {
     /**
      * serialVersionUID.
      */
-    private static final long serialVersionUID = -6371715190256049149L;
+    private static final long serialVersionUID = 5338981359593619861L;
 }

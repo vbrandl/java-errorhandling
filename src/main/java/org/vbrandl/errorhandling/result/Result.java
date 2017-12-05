@@ -39,7 +39,7 @@
  * limitations under the License.
  */
 
-package org.vbrandl.rop.result;
+package org.vbrandl.errorhandling.result;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -55,12 +55,12 @@ import java.util.function.Supplier;
 public abstract class Result<T, E> {
 
     /**
-     * Creates a new {@link org.vbrandl.rop.result.Ok} for the given value. If the value is {@code null}, an empty
-     * {@link Ok} will be created.
+     * Creates a new {@link org.vbrandl.errorhandling.result.Ok} for the given value. If the value is {@code null},
+     * an empty {@link Ok} will be created.
      * @param value The value to be wrapped
      * @param <T> The type of the Ok value
      * @param <E> The type of the Err value
-     * @return A new {@link org.vbrandl.rop.result.Ok} instance
+     * @return A new {@link org.vbrandl.errorhandling.result.Ok} instance
      */
     public static final <T, E> Result<T, E> ok(final T value) {
         return new Ok<>(value);
@@ -74,11 +74,11 @@ public abstract class Result<T, E> {
     abstract Optional<T> ok();
 
     /**
-     * Creates a new {@link org.vbrandl.rop.result.Err} for the given error.
+     * Creates a new {@link org.vbrandl.errorhandling.result.Err} for the given error.
      * @param error The error to be wrapped
      * @param <T> The type of the Ok value
      * @param <E> The type of the Err value
-     * @return A new {@link org.vbrandl.rop.result.Err} instance
+     * @return A new {@link org.vbrandl.errorhandling.result.Err} instance
      */
     public static final <T, E> Result<T, E> err(final E error) {
         return new Err<>(error);
@@ -91,36 +91,39 @@ public abstract class Result<T, E> {
     abstract Optional<E> err();
 
     /**
-     * Checks if this instance is an {@link org.vbrandl.rop.result.Ok}.
-     * @return {@code true} for {@link org.vbrandl.rop.result.Ok}, else {@code false}
+     * Checks if this instance is an {@link org.vbrandl.errorhandling.result.Ok}.
+     * @return {@code true} for {@link org.vbrandl.errorhandling.result.Ok}, else {@code false}
      */
     abstract boolean isOk();
 
     /**
-     * Checks if this instance is an {@link org.vbrandl.rop.result.Err}.
-     * @return {@code true} for {@link org.vbrandl.rop.result.Err}, else {@code false}
+     * Checks if this instance is an {@link org.vbrandl.errorhandling.result.Err}.
+     * @return {@code true} for {@link org.vbrandl.errorhandling.result.Err}, else {@code false}
      */
     abstract boolean isErr();
 
     /**
      * Checks if this instance has a value.
-     * @return {@code true} for an {@link org.vbrandl.rop.result.Ok} with value, {@code false} for an empty
-     * {@link org.vbrandl.rop.result.Ok} or {@link org.vbrandl.rop.result.Err}
+     * @return {@code true} for an {@link org.vbrandl.errorhandling.result.Ok} with value, {@code false} for an empty
+     * {@link org.vbrandl.errorhandling.result.Ok} or {@link org.vbrandl.errorhandling.result.Err}
      */
     abstract boolean hasValue();
 
     /**
-     * Get the wrapped value from an {@link org.vbrandl.rop.result.Ok}
+     * Get the wrapped value from an {@link org.vbrandl.errorhandling.result.Ok}
      * @return The wrapped value
-     * @throws org.vbrandl.rop.result.EmptyResultException if called on an empty {@link org.vbrandl.rop.result.Ok}
-     * @throws org.vbrandl.rop.result.ErrHasNoOkException if called on an {@link org.vbrandl.rop.result.Err}
+     * @throws org.vbrandl.errorhandling.result.EmptyResultException if called on an empty {@link
+     * org.vbrandl.errorhandling.result.Ok}
+     * @throws org.vbrandl.errorhandling.result.ErrHasNoOkException if called on an {@link
+     * org.vbrandl.errorhandling.result.Err}
      */
     abstract T getOk();
 
     /**
-     * Get the wrapped error from an {@link org.vbrandl.rop.result.Err}
+     * Get the wrapped error from an {@link org.vbrandl.errorhandling.result.Err}
      * @return The wrapped error
-     * @throws org.vbrandl.rop.result.OkHasNoErrException if called on an {@link org.vbrandl.rop.result.Ok}
+     * @throws org.vbrandl.errorhandling.result.OkHasNoErrException if called on an {@link
+     * org.vbrandl.errorhandling.result.Ok}
      */
     abstract E getErr();
 
