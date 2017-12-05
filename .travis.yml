@@ -6,10 +6,13 @@ jdk:
   - openjdk8
 
 after_success:
-  - ./gradlew cobertura pitest coveralls
+  - ./gradlew cobertura pitest coveralls -Pbintray_user="" -Pbintray_apikey=""
+
+install:
+  - ./gradlew assemble -Pbintray_user="" -Pbintray_apikey=""
 
 script:
-  - ./gradlew build
+  - ./gradlew build -Pbintray_user="" -Pbintray_apikey=""
 
 cache:
   directories:
