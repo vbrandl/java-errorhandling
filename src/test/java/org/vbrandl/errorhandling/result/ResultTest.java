@@ -47,7 +47,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.util.Optional;
 import org.junit.Test;
 
-public final class OkTest {
+public final class ResultTest {
 
     /**
      * Test method to create a {@code Result}.
