@@ -1,4 +1,7 @@
-# Railroad-Oriented-Programming
+# Java Monadic Errorhandling
+
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/vbrandl/countmap/blob/master/LICENSE-MIT)
+[![License](https://img.shields.io/badge/license-Apache-green.svg)](https://github.com/vbrandl/countmap/blob/master/LICENSE-APACHE)
 
 This library aims to provide some useful data types to be used in Java.
 
