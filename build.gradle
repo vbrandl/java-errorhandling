@@ -3,6 +3,9 @@ buildscript {
         jcenter()
 		mavenCentral()
     }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+    }
 }
 
 plugins {
@@ -13,12 +16,16 @@ plugins {
     id 'net.saliman.cobertura' version '2.5.2'
 }
 
-group 'org.vbrandl'
+group = 'org.vbrandl'
+archivesBaseName = "error-handling"
 version = '1.0.0'
 
-apply plugin: 'java'
-apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'findbugs'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'pmd'
 
 sourceCompatibility = 1.8
@@ -54,6 +61,20 @@ jar {
     }
 }
 
+task javadocJar(type: Jar, dependsOn: classes) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
 tasks.withType(FindBugs) {
     reports {
         xml.enabled false
@@ -83,4 +104,35 @@ cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml f
 pitest {
     timestampedReports = false
     outputFormats = ['XML']
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintray {
+    user = bintray_user
+    key = bintray_apikey
+    publications = ['mavenJava']
+    dryRun = false
+    publish = false
+    pkg {
+        repo = 'maven'
+        name = 'error-handling'
+        desc = 'Functional error-handling for Java'
+        websiteUrl = 'https://github.com/vbrandl/java-errorhandling'
+        issueTrackerUrl = 'https://github.com/vbrandl/java-errorhandling/issues'
+        vcsUrl = 'https://github.com/vbrandl/java-errorhandling.git'
+        licenses = ['Apache-2.0', 'MIT']
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+        }
+    }
 }
