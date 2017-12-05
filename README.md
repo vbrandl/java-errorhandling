@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/badge/license-Apache-green.svg)](https://github.com/vbrandl/countmap/blob/master/LICENSE-APACHE)
 [![Build Status](https://travis-ci.org/vbrandl/java-errorhandling.svg?branch=master)](https://travis-ci.org/vbrandl/java-errorhandling)
 [![Coverage Status](https://coveralls.io/repos/github/vbrandl/java-errorhandling/badge.svg?branch=master)](https://coveralls.io/github/vbrandl/java-errorhandling?branch=master)
+[![Download](https://api.bintray.com/packages/vbrandl/maven/error-handling/images/download.svg)](https://bintray.com/vbrandl/maven/error-handling/_latestVersion)
 
 This library aims to provide some useful data types to be used in Java.
 
