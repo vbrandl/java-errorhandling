@@ -49,217 +49,196 @@ import org.junit.Test;
 
 public final class OkTest {
 
-    /**
-     * Test method to create a {@code Result}.
-     */
-    public Result<Integer, Boolean> createResult(final boolean ok) {
-        return ok
-            ? Result.ok(3)
-            : Result.err(false);
+    private static final String STATIC_1337 = "1337";
+
+    private static <T> void throwNpeForValue(final T value) {
+        throw new NullPointerException(value.toString());
     }
 
     @Test
-    public void mapTest() {
-        final Result<Integer, Boolean> mapped = createResult(true)
-            .map(x -> x + 5)
-            .mapErr(x -> !x); // no-op
-        assertEquals(mapped, Result.ok(8));
+    public void okTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.ok(), Optional.of(3));
     }
 
     @Test
-    public void andThenTest() {
-        final Result<String, Boolean> mapped = createResult(true)
-            .andThen(x -> Result.ok(x.toString()));
-        assertEquals(mapped, Result.ok("3"));
+    public void okEmptyTest() {
+        final Ok<Integer, ?> ok = new Ok(null);
+        assertEquals(ok.ok(), Optional.empty());
     }
 
     @Test
-    public void orElseTest() {
-        final Result<Integer, String> mapped = createResult(false)
-            .orElse(x -> Result.err(x.toString()));
-        assertEquals(mapped, Result.err("false"));
+    public void errTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.err(), Optional.empty());
     }
 
     @Test
-    public void mapErrTest() {
-        final Result<Integer, Boolean> mappedErr = createResult(false)
-            .mapErr(x -> !x)
-            .map(x -> x + 5); // no-op
-        assertEquals(mappedErr, Result.err(true));
+    public void isOkTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.isOk(), true);
     }
 
     @Test
-    public void getOkTest() {
-        final Result<Integer, Boolean> mapped = createResult(true)
-            .map(x -> x + 5)
-            .mapErr(x -> !x); // no-op
-        final int result = mapped.getOk();
-        assertEquals(result, 8);
-    }
-
-    @Test
-    public void getErrTest() {
-        final Result<Integer, Boolean> mapped = createResult(false)
-            .mapErr(x -> !x);
-        final boolean result = mapped.getErr();
-        assertEquals(result, true);
-    }
-
-    @Test
-    public void hasValueEmptyResultTest() {
-        final Result<?, ?> res = Result.ok(null);
-        assertEquals(res.hasValue(), false);
+    public void isErrTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.isErr(), false);
     }
 
     @Test
     public void hasValueTest() {
-        final Result<?, ?> res = Result.ok(5);
-        assertEquals(res.hasValue(), true);
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.hasValue(), true);
     }
 
     @Test
-    public void hasValueErrTest() {
-        final Result<?, ?> res = Result.err(5);
-        assertEquals(res.hasValue(), false);
+    public void hasValueEmptyTest() {
+        final Ok<Integer, ?> ok = new Ok(null);
+        assertEquals(ok.hasValue(), false);
     }
 
     @Test
-    public void isOkOkTest() {
-        final Result<?, ?> res = Result.ok(5);
-        assertEquals(res.isOk(), true);
+    public void getOkTest() {
+        final Ok<Integer, ?> ok = new Ok("3");
+        assertEquals(ok.getOk(), "3");
+    }
+
+    @Test(expected = EmptyResultException.class)
+    public void getOkEmptyTest() {
+        final Ok<Integer, ?> ok = new Ok(null);
+        ok.getOk();
+    }
+
+    @Test(expected = OkHasNoErrException.class)
+    public void getErrTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        ok.getErr();
     }
 
     @Test
-    public void isOkErrTest() {
-        final Result<?, ?> res = Result.err(5);
-        assertEquals(res.isOk(), false);
+    public void mapTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.map(x -> x * x), new Ok(9));
     }
 
     @Test
-    public void isErrOkTest() {
-        final Result<?, ?> res = Result.ok(5);
-        assertEquals(res.isErr(), false);
+    public void mapEmptyTest() {
+        final Ok<Integer, ?> ok = new Ok(null);
+        assertEquals(ok.map(x -> x * x), new Ok(null));
     }
 
     @Test
-    public void isErrErrTest() {
-        final Result<?, ?> res = Result.err(5);
-        assertEquals(res.isErr(), true);
+    public void andThenTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.andThen(x -> Result.ok(x)), new Ok(3));
     }
 
     @Test
-    public void unwrapOrOkTest() {
-        final Result<String, Boolean> res = createResult(true).map(x -> x.toString());
-        final String unwraped = res.unwrapOr("42");
-        assertEquals(unwraped, "3");
+    public void andThenEmptyTest() {
+        final Ok<Integer, ?> ok = new Ok(null);
+        assertEquals(ok.andThen(x -> Result.ok(x)), new Ok(null));
     }
 
     @Test
-    public void unwrapOrErrTest() {
-        final Result<String, Boolean> res = createResult(false).map(x -> x.toString());
-        final String unwraped = res.unwrapOr("42");
-        assertEquals(unwraped, "42");
+    public void mapErrTest() {
+        final Ok<Integer, Boolean> ok = new Ok(42);
+        assertEquals(ok.mapErr(x -> !x), new Ok(42));
     }
 
     @Test
-    public void unwrapErrOrOkTest() {
-        final Result<Integer, Boolean> res = createResult(true);
-        assertEquals(res.unwrapErrOr(true), true);
-    }
-
-    @Test
-    public void unwrapErrOrErrTest() {
-        final Result<Integer, Boolean> res = createResult(false);
-        assertEquals(res.unwrapErrOr(true), false);
-    }
-
-    @Test
-    public void unwrapOrElseOkTest() {
-        final Result<String, Boolean> res = createResult(true).map(x -> x.toString());
-        assertEquals(res.unwrapOrElse(() -> "foo"), "3");
-    }
-
-    @Test
-    public void unwrapOrElseErrTest() {
-        final Result<String, Boolean> res = createResult(false).map(x -> x.toString());
-        assertEquals(res.unwrapOrElse(() -> "foo"), "foo");
-    }
-
-    @Test
-    public void unwrapErrOrElseOkTest() {
-        final Result<String, Boolean> res = createResult(true).map(x -> x.toString());
-        assertEquals(res.unwrapErrOrElse(() -> true), true);
-    }
-
-    @Test
-    public void unwrapErrOrElseErrTest() {
-        final Result<String, Boolean> res = createResult(false).map(x -> x.toString());
-        assertEquals(res.unwrapErrOrElse(() -> true), false);
-    }
-
-    @Test
-    public void okOkTest() {
-        final Result<Integer, Boolean> res = createResult(true);
-        assertEquals(res.ok(), Optional.of(3));
-    }
-
-    @Test
-    public void okErrTest() {
-        final Result<Integer, Boolean> res = createResult(false);
-        assertEquals(res.ok(), Optional.empty());
-    }
-
-    @Test
-    public void errOkTest() {
-        final Result<Integer, Boolean> res = createResult(true);
-        assertEquals(res.err(), Optional.empty());
-    }
-
-    @Test
-    public void errErrTest() {
-        final Result<Integer, Boolean> res = createResult(false);
-        assertEquals(res.err(), Optional.of(false));
-    }
-
-    @Test
-    public void unwrapOrThrowOkTest() {
-        final Result<String, Boolean> res = createResult(true).map(x -> x.toString());
-        assertEquals(res.unwrapOrThrow(NullPointerException::new), "3");
+    public void orElseTest() {
+        final Ok<Integer, Boolean> ok = new Ok(42);
+        assertEquals(ok.orElse(x -> Result.err(!x)), new Ok(42));
     }
 
     @Test(expected = NullPointerException.class)
-    public void unwrapOrThrowErrTest() {
-        final Result<Integer, Boolean> res = createResult(false);
-        res.unwrapOrThrow(NullPointerException::new);
+    public void ifOkExceptionTest() {
+        final Ok<Integer, ?> ok = new Ok(42);
+        ok.ifOk(OkTest::throwNpeForValue);
+    }
+
+    @Test
+    public void ifOkTest() {
+        final Ok<Integer, ?> ok = new Ok(42);
+        ok.ifOk(System.out::println);
+    }
+
+    @Test
+    public void ifErrTest() {
+        final Ok<Integer, ?> ok = new Ok(42);
+        ok.ifErr(OkTest::throwNpeForValue);
+    }
+
+    @Test
+    public void unwrapOrTest() {
+        final Ok<String, ?> ok = new Ok("42");
+        assertEquals(ok.unwrapOr(STATIC_1337), "42");
+    }
+
+    @Test
+    public void unwrapOrEmptyTest() {
+        final Ok<String, ?> ok = new Ok(null);
+        assertEquals(ok.unwrapOr(STATIC_1337), STATIC_1337);
+    }
+
+    @Test
+    public void unwrapErrOrTest() {
+        final Ok<Integer, Boolean> ok = new Ok(42);
+        assertEquals(ok.unwrapErrOr(false), false);
+    }
+
+    @Test
+    public void unwrapOrElseTest() {
+        final Ok<String, ?> ok = new Ok("42");
+        assertEquals(ok.unwrapOrElse(() -> STATIC_1337), "42");
+    }
+
+    @Test
+    public void unwrapOrElseEmptyTest() {
+        final Ok<String, ?> ok = new Ok(null);
+        assertEquals(ok.unwrapOrElse(() -> STATIC_1337), STATIC_1337);
+    }
+
+    @Test
+    public void unwrapErrOrElseTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        assertEquals(ok.unwrapErrOrElse(() -> true), true);
+    }
+
+    @Test
+    public void unwrapOrThrowTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        assertEquals(ok.unwrapOrThrow(NullPointerException::new), "42");
     }
 
     @Test(expected = NullPointerException.class)
-    public void unwrapErrOrThrowOkTest() {
-        final Result<Integer, Boolean> res = createResult(true);
-        res.unwrapErrOrThrow(NullPointerException::new);
+    public void unwrapOrThrowEmptyTest() {
+        final Ok<String, Boolean> ok = new Ok(null);
+        ok.unwrapOrThrow(NullPointerException::new);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void unwrapErrOrThrowTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        ok.unwrapErrOrThrow(NullPointerException::new);
     }
 
     @Test
-    public void unwrapErrOrThrowErrTest() {
-        final Result<Integer, Boolean> res = createResult(false);
-        assertEquals(res.unwrapErrOrThrow(NullPointerException::new), false);
+    public void equalsSameObjectTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        assertEquals(ok, ok);
     }
 
     @Test
-    public void equalsOkOkTest() {
-        assertEquals(Result.ok(3), Result.ok(3));
-        assertNotEquals(Result.ok(42), Result.ok(3));
+    public void equalsNullTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        assertNotEquals(ok, null);
     }
 
     @Test
-    public void equalsErrErrTest() {
-        assertEquals(Result.err(3), Result.err(3));
-        assertNotEquals(Result.err(42), Result.err(3));
-    }
-
-    @Test
-    public void equalsOkErrTest() {
-        assertNotEquals(Result.ok(3), Result.err(3));
-        assertNotEquals(Result.ok(42), Result.err(3));
+    public void hashCodeTest() {
+        final Ok<String, Boolean> fst = new Ok("42");
+        final Ok<String, Boolean> snd = new Ok("42");
+        assertEquals(fst.hashCode(), snd.hashCode());
     }
 }
