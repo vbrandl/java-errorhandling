@@ -6,7 +6,11 @@ buildscript {
 }
 
 plugins {
-	id 'nebula.lint' version '8.3.1'
+    id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
+    id 'info.solidsoft.pitest' version '1.2.4'
+    id 'nebula.lint' version '8.3.1'
+    id 'net.saliman.cobertura' version '2.5.2'
 }
 
 group 'org.vbrandl'
@@ -40,6 +44,7 @@ gradleLint {
 
 dependencies {
     testCompile 'junit:junit:[4.12,5.0)'
+    testRuntime 'org.slf4j:slf4j-api:1.7.10' // needed for cobertura
 }
 
 jar {
@@ -71,4 +76,11 @@ checkstyle {
 pmd {
     toolVersion = '5.7.0'
     ruleSetFiles = files('config/pmd/pmd-all-java.xml')
+}
+
+cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
+
+pitest {
+    timestampedReports = false
+    outputFormats = ['XML']
 }
