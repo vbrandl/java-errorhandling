@@ -42,6 +42,7 @@
 package org.vbrandl.errorhandling.result;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Optional;
 import org.junit.Test;
@@ -127,9 +128,15 @@ public final class ErrTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void ifErrTest() {
+    public void ifErrExceptionTest() {
         final Err<?, Integer> err = new Err(42);
         err.ifErr(ErrTest::throwNpeForValue);
+    }
+
+    @Test
+    public void ifErrTest() {
+        final Err<?, Integer> err = new Err(42);
+        err.ifErr(System.out::println);
     }
 
     @Test
@@ -166,5 +173,30 @@ public final class ErrTest {
     public void unwrapErrOrThrowTest() {
         final Err<String, Boolean> err = new Err(false);
         assertEquals(err.unwrapErrOrThrow(NullPointerException::new), false);
+    }
+
+    @Test
+    public void equalsSameObjectTest() {
+        final Err<String, Boolean> err = new Err("42");
+        assertEquals(err, err);
+    }
+
+    @Test
+    public void equalsOtherClassTest() {
+        final Err<String, Boolean> err = new Err("42");
+        assertNotEquals(err, "42");
+    }
+
+    @Test
+    public void equalsNullTest() {
+        final Err<String, Boolean> err = new Err("42");
+        assertNotEquals(err, null);
+    }
+
+    @Test
+    public void hashCodeTest() {
+        final Err<String, Boolean> fst = new Err("42");
+        final Err<String, Boolean> snd = new Err("42");
+        assertEquals(fst.hashCode(), snd.hashCode());
     }
 }

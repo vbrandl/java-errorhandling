@@ -42,6 +42,7 @@
 package org.vbrandl.errorhandling.result;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Optional;
 import org.junit.Test;
@@ -151,9 +152,15 @@ public final class OkTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void ifOkTest() {
+    public void ifOkExceptionTest() {
         final Ok<Integer, ?> ok = new Ok(42);
         ok.ifOk(OkTest::throwNpeForValue);
+    }
+
+    @Test
+    public void ifOkTest() {
+        final Ok<Integer, ?> ok = new Ok(42);
+        ok.ifOk(System.out::println);
     }
 
     @Test
@@ -214,5 +221,24 @@ public final class OkTest {
     public void unwrapErrOrThrowTest() {
         final Ok<String, Boolean> ok = new Ok("42");
         ok.unwrapErrOrThrow(NullPointerException::new);
+    }
+
+    @Test
+    public void equalsSameObjectTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        assertEquals(ok, ok);
+    }
+
+    @Test
+    public void equalsNullTest() {
+        final Ok<String, Boolean> ok = new Ok("42");
+        assertNotEquals(ok, null);
+    }
+
+    @Test
+    public void hashCodeTest() {
+        final Ok<String, Boolean> fst = new Ok("42");
+        final Ok<String, Boolean> snd = new Ok("42");
+        assertEquals(fst.hashCode(), snd.hashCode());
     }
 }
