@@ -108,7 +108,7 @@ public final class Ok<T, E> extends Result<T, E> {
 
     @Override
     public <U> Result<U, E> andThen(final Function<? super T, Result<U, E>> mapFn) {
-        return mapFn.apply(getOk());
+        return this.value.map(mapFn).orElse(new Ok<>(null));
     }
 
     @Override
