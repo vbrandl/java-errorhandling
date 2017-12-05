@@ -117,22 +117,24 @@ publishing {
 }
 
 bintray {
-    user = bintray_user
-    key = bintray_apikey
-    publications = ['mavenJava']
-    dryRun = false
-    publish = false
-    pkg {
-        repo = 'maven'
-        name = 'error-handling'
-        desc = 'Functional error-handling for Java'
-        websiteUrl = 'https://github.com/vbrandl/java-errorhandling'
-        issueTrackerUrl = 'https://github.com/vbrandl/java-errorhandling/issues'
-        vcsUrl = 'https://github.com/vbrandl/java-errorhandling.git'
-        licenses = ['Apache-2.0', 'MIT']
-        publicDownloadNumbers = true
-        version {
-            name = project.version
+    if (project.hasProperty('bintray_user') && project.hasProperty('bintray_apikey')) {
+        user = bintray_user
+        key = bintray_apikey
+        publications = ['mavenJava']
+        dryRun = false
+        publish = false
+        pkg {
+            repo = 'maven'
+            name = 'error-handling'
+            desc = 'Functional error-handling for Java'
+            websiteUrl = 'https://github.com/vbrandl/java-errorhandling'
+            issueTrackerUrl = 'https://github.com/vbrandl/java-errorhandling/issues'
+            vcsUrl = 'https://github.com/vbrandl/java-errorhandling.git'
+            licenses = ['Apache-2.0', 'MIT']
+            publicDownloadNumbers = true
+            version {
+                name = project.version
+            }
         }
     }
 }
