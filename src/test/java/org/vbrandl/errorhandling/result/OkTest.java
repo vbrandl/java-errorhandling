@@ -155,6 +155,12 @@ public final class OkTest {
     }
 
     @Test
+    public void andThenThrowingEmptyTest() {
+        final Ok<Integer, ?> ok = new Ok(null);
+        assertEquals(ok.andThenThrowing(OkTest::throwingMapper), new Ok(null));
+    }
+
+    @Test
     public void andThenThrowingThrowingTest() {
         final Ok<Integer, ?> ok = new Ok(0);
         assertTrue(ok.andThenThrowing(OkTest::throwingMapper).isErr());
