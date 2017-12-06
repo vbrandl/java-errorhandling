@@ -65,11 +65,13 @@ public final class ResultTest {
         assertTrue(result.isOk());
     }
 
+    private static String throwEx() throws Exception {
+        throw new Exception();
+    }
+
     @Test
     public void ofThrowingThrowingTest() {
-        final Result<String, ?> result = Result.ofThrowing(() -> {
-            throw new NullPointerException();
-        });
+        final Result<String, ?> result = Result.ofThrowing(() -> throwEx());
         assertTrue(result.isErr());
     }
 

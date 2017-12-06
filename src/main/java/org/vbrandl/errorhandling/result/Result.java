@@ -96,7 +96,7 @@ public abstract class Result<T, E> {
      * @param <T> Type if the return value
      * @return A new {@code Ok<T>} or {@code Err<? extends Throwable}
      */
-    public static final <T> Result<T, ? extends Throwable> ofThrowing(final Supplier<T> supplier) {
+    public static final <T> Result<T, ? extends Throwable> ofThrowing(final CheckedSupplier<T> supplier) {
         try {
             return Result.ok(supplier.get());
         } catch (final Throwable t) {
