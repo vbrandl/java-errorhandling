@@ -51,6 +51,10 @@ import java.util.function.Supplier;
  */
 public final class Err<T, E> extends Result<T, E> {
     /**
+     * To keep PMD silent.
+     */
+    private static final String UNCHECKED = "unchecked";
+    /**
      * The wrapped error.
      */
     private final E error;
@@ -99,16 +103,23 @@ public final class Err<T, E> extends Result<T, E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public <U> Result<U, E> map(final Function<? super T, U> mapFn) {
         return (Result<U, E>)this;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public <U> Result<U, E> andThen(final Function<? super T, Result<U, E>> mapFn) {
         return (Result<U, E>)this;
     }
+
+    @Override
+    @SuppressWarnings(UNCHECKED)
+    public <U> Result<U, ? extends Throwable> andThenThrowing(final CheckedFunction<? super T, U> mapFn) {
+        return (Result<U, ? extends Throwable>)this;
+    }
+
 
     @Override
     public <U> Result<T, U> mapErr(final Function<? super E, U> mapFn) {
@@ -166,7 +177,7 @@ public final class Err<T, E> extends Result<T, E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;

@@ -51,6 +51,10 @@ import java.util.function.Supplier;
  */
 public final class Ok<T, E> extends Result<T, E> {
     /**
+     * To keep PMD silent.
+     */
+    private static final String UNCHECKED = "unchecked";
+    /**
      * The wrapped value.
      */
     private final Optional<T> value;
@@ -112,13 +116,29 @@ public final class Ok<T, E> extends Result<T, E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    public <U> Result<U, ? extends Throwable> andThenThrowing(final CheckedFunction<? super T, U> mapFn) {
+        try {
+            final U result;
+            if (this.value.isPresent()) {
+                final T val = this.value.get();
+                result = mapFn.apply(val);
+            } else {
+                result = null;
+            }
+            return Result.ok(result);
+        } catch (final Throwable t) {
+            return new Err<>(t);
+        }
+    }
+
+    @Override
+    @SuppressWarnings(UNCHECKED)
     public <U> Result<T, U> mapErr(final Function<? super E, U> mapFn) {
         return (Result<T, U>)this;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public <U> Result<T, U> orElse(final Function<? super E, Result<T, U>> mapFn) {
         return (Result<T, U>)this;
     }
@@ -169,7 +189,7 @@ public final class Ok<T, E> extends Result<T, E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;

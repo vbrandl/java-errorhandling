@@ -43,6 +43,7 @@ package org.vbrandl.errorhandling.result;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 import org.junit.Test;
@@ -137,6 +138,26 @@ public final class OkTest {
     public void andThenEmptyTest() {
         final Ok<Integer, ?> ok = new Ok(null);
         assertEquals(ok.andThen(x -> Result.ok(x)), new Ok(null));
+    }
+
+    private static String throwingMapper(final Integer val) throws Exception {
+        if (val == 0) {
+            throw new Exception();
+        } else {
+            return val.toString();
+        }
+    }
+
+    @Test
+    public void andThenThrowingTest() {
+        final Ok<Integer, ?> ok = new Ok(3);
+        assertEquals(ok.andThenThrowing(OkTest::throwingMapper), new Ok("3"));
+    }
+
+    @Test
+    public void andThenThrowingThrowingTest() {
+        final Ok<Integer, ?> ok = new Ok(0);
+        assertTrue(ok.andThenThrowing(OkTest::throwingMapper).isErr());
     }
 
     @Test

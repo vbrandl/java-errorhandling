@@ -160,6 +160,15 @@ public abstract class Result<T, E> {
     abstract <U> Result<U, E> andThen(final Function<? super T, Result<U, E>> mapFn);
 
     /**
+     * Applies a function {@code T -> U} that might throw an exception to the wrapped value. If an exception is thrown,
+     * the final {@code Result} has the exception as error value.
+     * @param mapFn The function to apply
+     * @param <U> The type of the new Ok value
+     * @return A new {@code Result<U, ? extends Throwable}
+     */
+    abstract <U> Result<U, ? extends Throwable> andThenThrowing(final CheckedFunction<? super T, U> mapFn);
+
+    /**
      * Applies a function {@code E -> U} to the wrapped error and returns a new {@link Result}. If applied on an
      * {@link Ok} the wrapper is returned unchanged
      * @param mapFn The function to apply
