@@ -43,6 +43,7 @@ package org.vbrandl.errorhandling.result;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 import org.junit.Test;
@@ -56,6 +57,20 @@ public final class ResultTest {
         return ok
             ? Result.ok(3)
             : Result.err(false);
+    }
+
+    @Test
+    public void ofThrowingTest() {
+        final Result<String, ?> result = Result.ofThrowing(() -> "foobar");
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void ofThrowingThrowingTest() {
+        final Result<String, ?> result = Result.ofThrowing(() -> {
+            throw new NullPointerException();
+        });
+        assertTrue(result.isErr());
     }
 
     @Test

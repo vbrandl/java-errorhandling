@@ -91,6 +91,20 @@ public abstract class Result<T, E> {
     abstract Optional<E> err();
 
     /**
+     * Executes a supplier that might throw an exception and returns the result or the exception as an {@link Result}.
+     * @param supplier The supplier to execute
+     * @param <T> Type if the return value
+     * @return A new {@code Ok<T>} or {@code Err<? extends Throwable}
+     */
+    public static final <T> Result<T, ? extends Throwable> ofThrowing(final Supplier<T> supplier) {
+        try {
+            return Result.ok(supplier.get());
+        } catch (final Throwable t) {
+            return Result.err(t);
+        }
+    }
+
+    /**
      * Checks if this instance is an {@link org.vbrandl.errorhandling.result.Ok}.
      * @return {@code true} for {@link org.vbrandl.errorhandling.result.Ok}, else {@code false}
      */
